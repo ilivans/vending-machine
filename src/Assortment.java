@@ -1,18 +1,18 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
-public class Assortment {
+public class Assortment extends JPanel {
     public ArrayList<Compartment> compartments;
-    public ArrayList<Integer> productsIDs;
 
-    public void occupyID() {
-        // TODO: to understand
+    public Assortment(LayoutManager layoutManager, boolean b, ArrayList<Compartment> compartments) {
+        super(layoutManager, b);
+        this.compartments = compartments;
     }
-    public void vacateID() {
-        // TODO: to understand
-    }
+
     public void changeCompartment(Compartment compartment, Product product, Integer number) {
         compartment.changeProduct(product);
         compartment.changeCellsFree(Integer.max(compartment.cells_max - number, 0));
@@ -24,5 +24,8 @@ public class Assortment {
             }
         }
         throw new ValueException("No compartment with id " + compartment_id.toString());
+    }
+    public void buy(Integer compartment_id) {
+        // TODO: implementation
     }
 }

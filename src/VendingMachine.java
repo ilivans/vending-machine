@@ -1,5 +1,10 @@
-/**
- * Created by ilya on 03.12.16.
- */
-public class VendingMachine {
+import javax.swing.*;
+
+public class VendingMachine extends JFrame {
+    private JPanel panel;
+    private JPanel assortment;
+
+    VendingMachine() {
+
+    }
 }

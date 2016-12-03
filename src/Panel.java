@@ -1,22 +1,31 @@
+import javax.swing.*;
+import java.awt.*;
 
-public class Panel {
+public class Panel extends JPanel {
     private CashBox cashBox;
     private Assortment assortment;
     private Boolean mode;
 
+    public Panel(LayoutManager layoutManager, boolean b, CashBox cashBox, Assortment assortment) {
+        super(layoutManager, b);
+        this.cashBox = cashBox;
+        this.assortment = assortment;
+        this.mode = true;
+    }
+
     public void work() {
-        // TODO: to understand
+
     }
     private void getChange() {
-        // TODO: to understand
+        // TODO: implementation
     }
     private void putMoney() {
-        // TODO: to understand
+        // TODO: implementation
     }
     private void getMoney() {
-        // TODO: to understand
+        // TODO: implementation
     }
     private void tryBuy(Integer compartment_id) {
-        // TODO: to understand
+        // TODO: implementation
     }
 }
