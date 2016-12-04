@@ -1,6 +1,7 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 
 import java.util.List;
 import java.awt.*;
@@ -10,8 +11,15 @@ public class Assortment extends JPanel {
     private Integer num_compartments;
 
     public Assortment(List<Compartment> compartments) {
+        super(new GridLayout(3, 3, 50, 50));
+        setBorder(new TitledBorder("Assortment"));
+        setBackground(Color.white);
+
         num_compartments = compartments.size();
         this.compartments = compartments;
+        for (Compartment compartment : compartments) {
+            add(compartment);
+        }
     }
 
     public void changeCompartment(Compartment compartment, Product product, Integer number) {

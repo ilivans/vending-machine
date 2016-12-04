@@ -9,6 +9,8 @@ public class Compartment extends JLabel {
 
     public Compartment(String s, Icon icon, int i, Integer id, Integer cells_max, Integer cells_free, Product product) {
         super(s, icon, i);
+        setHorizontalTextPosition(JLabel.CENTER);
+        setVerticalTextPosition(JLabel.BOTTOM);
         this.id = id;
         this.cells_max = cells_max;
         this.cells_free = cells_free;
