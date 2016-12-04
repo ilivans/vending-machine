@@ -14,23 +14,66 @@ public class CashBox extends JPanel {
     private List<Banknotes> banknotes;
     private JButton bill_acceptor;
     private JButton coin_acceptor;
+    private List<Coins> change;
+    private JButton change_window;
+    private JLabel sum_display;
+
 
     public CashBox(List<Coins> coins, List<Banknotes> banknotes) {
-        super(new GridLayout(3, 1, 50, 50));
+        super(new GridLayout(4, 1, 0, 0));
 
         this.sum = 0;
         this.coins = coins;
         this.banknotes = banknotes;
 
-        setBorder(new TitledBorder("CashBox"));
-        setBackground(Color.white);
+        setBorder(new TitledBorder(""));
+        setBackground(Color.lightGray);
 
-        bill_acceptor = new JButton("Bill Acceptor", new ImageIcon(Panel.class.getResource("images/bill-acceptor.jpg")));
+        sum_display = new JLabel(sum.toString());
+        sum_display.setBorder(new TitledBorder("Sum entered"));
+        add(sum_display);
+        initCoinAcceptor();
+        add(coin_acceptor);
+        initBillAcceptor();
+        add(bill_acceptor);
+        initChangeWindow();
+        add(change_window);
+    }
+
+    private void initCoinAcceptor() {
+        coin_acceptor = new JButton("Coin Acceptor", new ImageIcon(Panel.class.getResource("images/coin-acceptor.png")));
+        coin_acceptor.setHorizontalTextPosition(JLabel.CENTER);
+        coin_acceptor.setVerticalTextPosition(JLabel.BOTTOM);
+        coin_acceptor.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                Object[] options = {"5 rub.", "10 rub."};
+                int response = JOptionPane.showOptionDialog(new JFrame(),
+                        "Choose denomination",
+                        "",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                int denomination = 0;
+                switch (response) {
+                    case JOptionPane.YES_OPTION: denomination = 5;
+                        break;
+                    default: denomination = 10;
+                        break;
+                }
+                insert(true, Arrays.asList(new Coins(1, 1, denomination)), new ArrayList<>());
+            }
+        });
+    }
+
+    private void initBillAcceptor() {
+        bill_acceptor = new JButton("Bill Acceptor", new ImageIcon(Panel.class.getResource("images/bill-acceptor.png")));
         bill_acceptor.setHorizontalTextPosition(JLabel.CENTER);
         bill_acceptor.setVerticalTextPosition(JLabel.BOTTOM);
         bill_acceptor.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e){
-                Object[] options = {"10", "50", "100"};
+                Object[] options = {"10 rub.", "50 rub.", "100 rub."};
                 int response = JOptionPane.showOptionDialog(new JFrame(),
                         "Choose denomination",
                         "",
@@ -48,22 +91,43 @@ public class CashBox extends JPanel {
                     default: denomination = 100;
                         break;
                 }
-                insert(true, new ArrayList<>(), Arrays.asList(new Banknotes(1, 0, denomination)));
+                insert(true, new ArrayList<>(), Arrays.asList(new Banknotes(1, 1, denomination)));
             }
         });
-        add(bill_acceptor);
     }
 
-    public void insert(Boolean mode, List<Coins> coins, List<Banknotes> banknotes) {
-        // TODO: implementation
+    private void initChangeWindow() {
+        change_window = new JButton("Your Change", new ImageIcon(Panel.class.getResource("images/change.png")));
+        change_window.setHorizontalTextPosition(JLabel.CENTER);
+        change_window.setVerticalTextPosition(JLabel.BOTTOM);
     }
 
-    private void addBanknotes(Banknotes banknotes) {
-        // TODO: implementation
+    public void insert(Boolean mode, List<Coins> coins_new, List<Banknotes> banknotes_new) {
+        // TODO: show new sum in sum_display
+        // TODO: add logic with dropping extra money (that don't fit in anymore) into Change window
+        int cur_sum = sum;
+        for (Coins coins_add : coins_new) {
+            addCoins(coins_add);
+        }
+        for (Banknotes banknotes_add : banknotes_new) {
+            addBanknotes(banknotes_add);
+        }
     }
 
-    private void addCoins(Banknotes banknotes) {
-        // TODO: implementation
+    private void addBanknotes(Banknotes banknotes_add) {
+        for (Banknotes banknotes : this.banknotes) {
+            if (banknotes.denomination.equals(banknotes_add.denomination)) {
+                banknotes.changeNumber(banknotes.number + banknotes_add.number);
+            }
+        }
+    }
+
+    private void addCoins(Coins coins_add) {
+        for (Coins coins : this.coins) {
+            if (coins.denomination.equals(coins_add.denomination)) {
+                coins.changeNumber(coins.number + coins_add.number);
+            }
+        }
     }
 
     public void take(Boolean mode, List<Coins> coinss, List<Banknotes> banknotes) {

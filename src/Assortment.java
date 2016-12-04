@@ -8,14 +8,12 @@ import java.awt.*;
 
 public class Assortment extends JPanel {
     public List<Compartment> compartments;
-    private Integer num_compartments;
 
     public Assortment(List<Compartment> compartments) {
         super(new GridLayout(3, 3, 50, 50));
         setBorder(new TitledBorder("Assortment"));
         setBackground(Color.white);
 
-        num_compartments = compartments.size();
         this.compartments = compartments;
         for (Compartment compartment : compartments) {
             add(compartment);

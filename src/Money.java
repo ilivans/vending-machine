@@ -11,6 +11,6 @@ public class Money {
     }
 
     public void changeNumber(Integer new_number) {
-        number = new_number;
+        number = Integer.max(new_number, number);
     }
 }
