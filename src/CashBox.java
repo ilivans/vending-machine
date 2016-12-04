@@ -1,4 +1,6 @@
 
+import utils.Pair;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;

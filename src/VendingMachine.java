@@ -1,16 +1,18 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class VendingMachine extends JFrame {
-    private JPanel panel;
+    private Panel panel;
 
     public VendingMachine(String label) {
         super(label);
         setBackground(Color.white);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         panel = new Panel(true);
         add(panel);
         pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void run() {

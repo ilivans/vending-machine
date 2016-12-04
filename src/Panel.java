@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,21 +12,53 @@ public class Panel extends JPanel {
     private Assortment assortment;
     private Boolean mode;
 
+    private ThreadLocalRandom random = ThreadLocalRandom.current();
     private CodeInput code_input = new CodeInput();
-    private ThreadLocalRandom random;
+    private JButton lock;
+    private ImageIcon lock_icon = new ImageIcon(Panel.class.getResource("images/lock.png"));
+    private ImageIcon unlock_icon = new ImageIcon(Panel.class.getResource("images/unlock.png"));
 
     public Panel(Boolean mode) {
         super();
-        setBackground(Color.white);
+//        this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.mode = mode;
-        random = ThreadLocalRandom.current();
+        setBackground(Color.white);
 
         initCashBox();
         initAssortment();
+        initLock();
+
 
         add(assortment);
         add(code_input);
         add(cashBox);
+        add(lock);
+
+    }
+
+    private void initLock() {
+        lock = new JButton("Staff only", lock_icon);
+        lock.setHorizontalTextPosition(JLabel.CENTER);
+        lock.setVerticalTextPosition(JLabel.BOTTOM);
+        lock.setBackground(Color.white);
+        lock.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mode = !mode;
+                if (mode) {
+                    lock.setIcon(lock_icon);
+                    for (JSpinner spinner : assortment.compartment_managers) {
+//                        spinner.setVisible(false);
+                        spinner.setEnabled(false);
+                    }
+                } else {
+                    lock.setIcon(unlock_icon);
+                    for (JSpinner spinner : assortment.compartment_managers) {
+                        spinner.setEnabled(true);
+                    }
+                }
+            }
+        });
     }
 
     private void initCashBox() {
