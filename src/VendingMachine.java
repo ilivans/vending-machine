@@ -1,10 +1,12 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class VendingMachine extends JFrame {
     private JPanel panel;
-    private JPanel assortment;
 
-    VendingMachine() {
 
+    public VendingMachine(String s, GraphicsConfiguration graphicsConfiguration) {
+        super(s, graphicsConfiguration);
+        panel = new Panel();
     }
 }

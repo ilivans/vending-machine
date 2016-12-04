@@ -1,15 +1,15 @@
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
+
+import java.util.List;
 
 public class Assortment extends JPanel {
-    public ArrayList<Compartment> compartments;
+    public List<Compartment> compartments;
+    private Integer num_compartments;
 
-    public Assortment(LayoutManager layoutManager, boolean b, ArrayList<Compartment> compartments) {
-        super(layoutManager, b);
+    public Assortment(List<Compartment> compartments) {
+        num_compartments = compartments.size();
         this.compartments = compartments;
     }
 

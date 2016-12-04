@@ -1,18 +1,19 @@
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CashBox {
     public Integer sum;
-    private ArrayList<Coins> coins;
-    private ArrayList<Banknotes> banknotes;
+    private List<Coins> coins;
+    private List<Banknotes> banknotes;
 
-    public CashBox(ArrayList<Coins> coins, ArrayList<Banknotes> banknotes) {
+    public CashBox(List<Coins> coins, List<Banknotes> banknotes) {
         this.sum = 0;
         this.coins = coins;
         this.banknotes = banknotes;
     }
 
-    public void insert(Boolean mode, ArrayList<Coins> coins, ArrayList<Banknotes> banknotes) {
+    public void insert(Boolean mode, List<Coins> coins, List<Banknotes> banknotes) {
         // TODO: implementation
     }
 
@@ -24,7 +25,7 @@ public class CashBox {
         // TODO: implementation
     }
 
-    public void take(Boolean mode, ArrayList<Coins> coinss, ArrayList<Banknotes> banknotes) {
+    public void take(Boolean mode, List<Coins> coinss, List<Banknotes> banknotes) {
         // TODO: implementation
     }
 
@@ -36,8 +37,8 @@ public class CashBox {
         // TODO: implementation
     }
 
-    public Pair<ArrayList<Coins>, ArrayList<Banknotes>> intToMoney() {
+    public Pair<List<Coins>, List<Banknotes>> intToMoney() {
         // TODO: implementation
-        return new Pair<ArrayList<Coins>, ArrayList<Banknotes>>(new ArrayList<Coins>(), new ArrayList<Banknotes>());
+        return new Pair<>(new ArrayList<Coins>(), new ArrayList<Banknotes>());
     }
 }
