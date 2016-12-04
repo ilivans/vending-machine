@@ -3,6 +3,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 import javax.swing.*;
 
 import java.util.List;
+import java.awt.*;
 
 public class Assortment extends JPanel {
     public List<Compartment> compartments;

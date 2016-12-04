@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.awt.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Panel extends JPanel {
     private CashBox cashBox;
@@ -11,32 +13,66 @@ public class Panel extends JPanel {
     public Panel() {
         super();
         this.mode = true;
-        cashBox = new CashBox(new ArrayList<Coins>(), new ArrayList<Banknotes>());
 
-        int num_compartments = 10;
-        List<String> product_names = Arrays.asList("bonaqua", "bounty", "coca-cola");
-        List<Compartment> compartments = new ArrayList<>();
-        for (int i =1; i < num_compartments; i++) {
-            compartments.add(new Compartment())
+        initCashBox();
+        initAssortment();
+    }
+
+    private void initCashBox() {
+        Integer coins_max_size = 40;
+        List<Integer> coins_denominations = Arrays.asList(1, 2 , 5, 10);
+        List<Coins> coins = new ArrayList<>();
+        for (Integer denomination : coins_denominations) {
+            coins.add(new Coins(ThreadLocalRandom.current().nextInt(coins_max_size / 2, coins_max_size), coins_max_size, denomination));
         }
 
-        assortment = new Assortment(new ArrayList<Compartment>());
+        Integer banknotes_max_size = 100;
+        List<Integer> banknotes_denominations = Arrays.asList(10, 50, 100);
+        List<Banknotes> banknotes = new ArrayList<>();
+        for (Integer denomination : banknotes_denominations) {
+            banknotes.add(new Banknotes(ThreadLocalRandom.current().nextInt(banknotes_max_size / 2, banknotes_max_size), banknotes_max_size, denomination));
+        }
 
+        cashBox = new CashBox(coins, banknotes);
+    }
+
+    private void initAssortment() {
+        // there must must be pictures with the same names and .jpg format in images folder
+        List<String> product_names = Arrays.asList("bonaqua", "bounty", "coca-cola", "fanta", "lay's", "m&m's");
+        List<Compartment> compartments = new ArrayList<>();
+        int cells_max = 10;
+        // iterate throw products and add them to compartments list
+        for (int i = 0; i < product_names.size(); i++) {
+            String product_name = product_names.get(i);
+            Integer price = ThreadLocalRandom.current().nextInt(40, 80);
+            Product product = new Product(product_name, price, i);
+            Integer compartment_id = i + 10;
+            String label = String.format("%d | %dр", compartment_id, product.price);
+            ImageIcon icon = new ImageIcon(Panel.class.getResource(String.format("images/%s.jpg", product_name)));
+            Integer cells_free = ThreadLocalRandom.current().nextInt(0, 10);
+            compartments.add(new Compartment(label, icon, JLabel.CENTER, compartment_id, cells_max, cells_free, product));
+        }
+        assortment = new Assortment(compartments);
     }
 
     public void work() {
 
     }
+
     private void getChange() {
         // TODO: implementation
     }
+
     private void putMoney() {
         // TODO: implementation
     }
+
     private void getMoney() {
         // TODO: implementation
     }
+
     private void tryBuy(Integer compartment_id) {
         // TODO: implementation
     }
+
 }

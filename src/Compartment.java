@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 
 public class Compartment extends JLabel {
     public Integer id;
