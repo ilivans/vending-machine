@@ -109,16 +109,16 @@ public class CashBox extends JPanel {
         int cur_sum = sum;
         for (Coins coins_add : coins_new) {
             addCoins(coins_add);
-            if (!mode) {
+            if (mode) {
                 sum += coins_add.denomination * coins_add.number;
-                //display new sum
+                sum_display.setText(Integer.toString(sum));
             }
         }
         for (Banknotes banknotes_add : banknotes_new) {
             addBanknotes(banknotes_add);
-            if (!mode) {
+            if (mode) {
                 sum += banknotes_add.denomination * banknotes_add.number;
-                //display new sum
+                sum_display.setText(Integer.toString(sum));
             }
         }
     }
@@ -167,7 +167,7 @@ public class CashBox extends JPanel {
         for (Coins coins : this.coins) {
             if (coins.denomination.equals(coins_sub.denomination)) {
                 coins.changeNumber(Math.max(0, coins.number - coins_sub.number));
-                if (!mode) {
+                if (mode) {
                     sum -= coins.denomination * Math.max(0, coins.number - coins_sub.number);
                 }
                 break;
@@ -179,7 +179,7 @@ public class CashBox extends JPanel {
         for (Banknotes banknotes : this.banknotes) {
             if (banknotes.denomination.equals(banknotes_sub.denomination)) {
                 banknotes.changeNumber(Math.max(0, banknotes.number - banknotes_sub.number));
-                if (!mode) {
+                if (mode) {
                     sum -= banknotes.denomination * Math.max(0, banknotes.number - banknotes_sub.number);
                 }
                 break;
