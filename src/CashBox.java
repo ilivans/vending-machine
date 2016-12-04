@@ -5,10 +5,9 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
+import java.util.List;
 
 public class CashBox extends JPanel {
     public Integer sum;
@@ -110,16 +109,31 @@ public class CashBox extends JPanel {
         int cur_sum = sum;
         for (Coins coins_add : coins_new) {
             addCoins(coins_add);
+            if (!mode) {
+                sum += coins_add.denomination * coins_add.number;
+                //display new sum
+            }
         }
         for (Banknotes banknotes_add : banknotes_new) {
             addBanknotes(banknotes_add);
+            if (!mode) {
+                sum += banknotes_add.denomination * banknotes_add.number;
+                //display new sum
+            }
         }
     }
 
     private void addBanknotes(Banknotes banknotes_add) {
         for (Banknotes banknotes : this.banknotes) {
             if (banknotes.denomination.equals(banknotes_add.denomination)) {
-                banknotes.changeNumber(banknotes.number + banknotes_add.number);
+                if (banknotes.max_size < banknotes.number + banknotes_add.number) {
+                    banknotes.changeNumber(banknotes.max_size);
+                    //show that you get (banknotes.number -banknotes_add.number) back
+                }
+                else {
+                    banknotes.changeNumber(banknotes.number + banknotes_add.number);
+                }
+                break;
             }
         }
     }
@@ -127,25 +141,65 @@ public class CashBox extends JPanel {
     private void addCoins(Coins coins_add) {
         for (Coins coins : this.coins) {
             if (coins.denomination.equals(coins_add.denomination)) {
-                coins.changeNumber(coins.number + coins_add.number);
+                if (coins.max_size < coins.number + coins_add.number) {
+                    coins.changeNumber(coins.max_size);
+                    //show that you get (coins.number -coins_add.number) back
+                }
+                else {
+                    coins.changeNumber(coins.number + coins_add.number);
+                }
+                break;
             }
         }
     }
 
-    public void take(Boolean mode, List<Coins> coinss, List<Banknotes> banknotes) {
-        // TODO: implementation
+    public void take(Boolean mode, List<Coins> coins, List<Banknotes> banknotes) {
+        for (Coins coin : coins) {
+            subCoins(mode, coin);
+        }
+
+        for (Banknotes banknote : banknotes) {
+            subBanknontes(mode, banknote);
+        }
     }
 
-    private void subCoins(Coins unit) {
-        // TODO: implementation
+    private void subCoins(Boolean mode, Coins coins_sub) {
+        for (Coins coins : this.coins) {
+            if (coins.denomination.equals(coins_sub.denomination)) {
+                coins.changeNumber(Math.max(0, coins.number - coins_sub.number));
+                if (!mode) {
+                    sum -= coins.denomination * Math.max(0, coins.number - coins_sub.number);
+                }
+                break;
+            }
+        }
     }
 
-    private void subBanknontes(Banknotes unit) {
-        // TODO: implementation
+    private void subBanknontes(Boolean mode, Banknotes banknotes_sub) {
+        for (Banknotes banknotes : this.banknotes) {
+            if (banknotes.denomination.equals(banknotes_sub.denomination)) {
+                banknotes.changeNumber(Math.max(0, banknotes.number - banknotes_sub.number));
+                if (!mode) {
+                    sum -= banknotes.denomination * Math.max(0, banknotes.number - banknotes_sub.number);
+                }
+                break;
+            }
+        }
     }
 
     public Pair<List<Coins>, List<Banknotes>> intToMoney() {
-        // TODO: implementation
-        return new Pair<>(new ArrayList<Coins>(), new ArrayList<Banknotes>());
+        ArrayList<Coins> res_coins = new ArrayList<Coins>();
+        ArrayList<Banknotes> res_banknotes = new ArrayList<Banknotes>();
+        Collections.sort(this.coins, Money.getCompByName());
+        Collections.sort(this.banknotes, Money.getCompByName());
+        for (Banknotes banknote : this.banknotes) {
+            Integer count = Math.min(banknote.number, sum/banknote.denomination);
+            res_banknotes.add(new Banknotes(count, banknote.max_size, banknote.denomination));
+        }
+        for (Coins coin : this.coins) {
+            Integer count = Math.min(coin.number, sum/coin.denomination);
+            res_coins.add(new Coins(count, coin.max_size, coin.denomination));
+        }
+        return new Pair<>(coins, banknotes);
     }
 }

@@ -27,8 +27,7 @@ public class Panel extends JPanel {
         initCashBox();
         initAssortment();
         initLock();
-
-
+        
         add(assortment);
         add(code_input);
         add(cashBox);

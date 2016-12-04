@@ -1,3 +1,4 @@
+import java.util.Comparator;
 
 public class Money {
     public Integer number;
@@ -12,5 +13,14 @@ public class Money {
 
     public void changeNumber(Integer new_number) {
         number = Integer.max(new_number, number);
+    }
+
+    public static Comparator<Money> getCompByName() {
+        Comparator comp = new Comparator<Money>(){
+            public int compare(Money s1, Money s2) {
+                return s1.denomination.compareTo(s2.denomination);
+            }
+        };
+        return comp;
     }
 }
