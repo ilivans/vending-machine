@@ -1,3 +1,9 @@
+import goods.Assortment;
+import goods.Compartment;
+import goods.Product;
+import pay_system.Banknotes;
+import pay_system.CashBox;
+import pay_system.Coins;
 import utils.Pair;
 
 import javax.swing.*;
@@ -159,7 +165,7 @@ public class Panel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (mode && cashbox.sum > 0) {
-                    JOptionPane.showMessageDialog(new JFrame(), "Money entered.");
+                    JOptionPane.showMessageDialog(new JFrame(), "pay_system.Money entered.");
                     return;
                 }
                 mode = !mode;

@@ -1,3 +1,4 @@
+package goods;
 
 public class Product {
     public String name;

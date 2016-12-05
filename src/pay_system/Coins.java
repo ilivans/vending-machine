@@ -1,3 +1,4 @@
+package pay_system;
 
 public class Coins extends Money {
 

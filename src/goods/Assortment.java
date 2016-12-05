@@ -1,3 +1,5 @@
+package goods;
+
 import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
 
 import javax.swing.*;
@@ -15,7 +17,7 @@ public class Assortment extends JPanel {
 
     public Assortment(List<Compartment> compartments) {
         super(new GridLayout(3, 3, 50, 50));
-        setBorder(new TitledBorder("Assortment"));
+        setBorder(new TitledBorder("goods.Assortment"));
         setBackground(Color.white);
 
         this.compartments = compartments;
