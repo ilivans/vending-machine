@@ -156,6 +156,10 @@ public class Panel extends JPanel {
         lock.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (mode && cashbox.sum > 0) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Money entered.");
+                    return;
+                }
                 mode = !mode;
                 if (mode) {
                     lock.setIcon(lock_icon);
@@ -174,6 +178,10 @@ public class Panel extends JPanel {
                     for (JLabel icon : cashbox.banknotes_icons) {
                         icon.setEnabled(false);
                     }
+                    buy_button.setEnabled(true);
+                    coin_acceptor.setEnabled(true);
+                    bill_acceptor.setEnabled(true);
+                    change_window.setEnabled(true);
                 } else {
                     lock.setIcon(unlock_icon);
                     for (JSpinner spinner : assortment.compartment_managers) {
@@ -191,6 +199,10 @@ public class Panel extends JPanel {
                     for (JLabel icon : cashbox.banknotes_icons) {
                         icon.setEnabled(true);
                     }
+                    buy_button.setEnabled(false);
+                    coin_acceptor.setEnabled(false);
+                    bill_acceptor.setEnabled(false);
+                    change_window.setEnabled(false);
                 }
             }
         });
