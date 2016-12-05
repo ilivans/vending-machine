@@ -1,19 +1,87 @@
 
 import utils.Pair;
+
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class CashBox {
+public class CashBox extends JPanel {
     public Integer sum;
     private List<Coins> coins;
     private List<Banknotes> banknotes;
 
+    public List<JLabel> coins_icons = new ArrayList<>();
+    public List<JLabel> banknotes_icons = new ArrayList<>();
+    public List<JSpinner> coins_managers = new ArrayList<>();
+    public List<JSpinner> banknotes_managers = new ArrayList<>();
+
     private Boolean mode;
 
     public CashBox(List<Coins> coins, List<Banknotes> banknotes) {
+        super(new GridLayout(3, 2, 50, 50));
+        setBackground(Color.white);
+        setBorder(new TitledBorder("Cashbox"));
+        setEnabled(false);
         this.sum = 0;
         this.coins = coins;
         this.banknotes = banknotes;
+
+        initPanels();
+    }
+
+    private void initPanels() {
+        for (Coins c : coins) {
+            JPanel coin_panel = new JPanel(new BorderLayout());
+
+            JSpinner spinner = new JSpinner(new SpinnerNumberModel((int) c.number, 0,(int) c.max_size, 1));
+            spinner.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    for (int i = 0; i < coins.size(); i++) {
+                        if (spinner.equals(coins_managers.get(i))) {
+                            coins.get(i).number = (Integer) spinner.getValue();
+                        }
+                    }
+                }
+            });
+            spinner.setEnabled(false);
+            coins_managers.add(spinner);
+
+            JLabel icon = new JLabel(new ImageIcon(VendingMachine.class.getResource(String.format("images/coin%d.jpg", c.denomination))));
+            icon.setEnabled(false);
+            coins_icons.add(icon);
+            coin_panel.add(icon, BorderLayout.CENTER);
+            coin_panel.add(spinner, BorderLayout.PAGE_END);
+            add(coin_panel);
+        }
+        for (Banknotes b : banknotes) {
+            JPanel banknote_panel = new JPanel(new BorderLayout());
+
+            JSpinner spinner = new JSpinner(new SpinnerNumberModel((int) b.number, 0,(int) b.max_size, 1));
+            spinner.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    for (int i = 0; i < banknotes.size(); i++) {
+                        if (spinner.equals(banknotes_managers.get(i))) {
+                            banknotes.get(i).number = (Integer) spinner.getValue();
+                        }
+                    }
+                }
+            });
+            spinner.setEnabled(false);
+            banknotes_managers.add(spinner);
+
+            JLabel icon = new JLabel(new ImageIcon(VendingMachine.class.getResource(String.format("images/bill%d.jpg", b.denomination))));
+            icon.setEnabled(false);
+            banknotes_icons.add(icon);
+            banknote_panel.add(icon, BorderLayout.CENTER);
+            banknote_panel.add(spinner, BorderLayout.PAGE_END);
+            add(banknote_panel);
+        }
     }
 
     public void insert(Boolean mode, List<Coins> coins_new, List<Banknotes> banknotes_new) {

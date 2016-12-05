@@ -23,13 +23,12 @@ public class Panel extends JPanel {
     private JLabel sum_display;
     private JButton coin_acceptor;
     private JButton bill_acceptor;
-    private List<Coins> change;
     private JButton change_window;
+    private Pair<List<Coins>, List<Banknotes>> change;
 
     private JButton lock;
     private ImageIcon lock_icon = new ImageIcon(Panel.class.getResource("images/lock.png"));
     private ImageIcon unlock_icon = new ImageIcon(Panel.class.getResource("images/unlock.png"));
-
 
     public Panel(Boolean mode) {
         super();
@@ -37,7 +36,7 @@ public class Panel extends JPanel {
         setBackground(Color.white);
 
         setBorder(new TitledBorder(""));
-        setBackground(Color.lightGray);
+        setBackground(Color.white);
 
         initAssortment();
         initBuyButton();
@@ -49,6 +48,7 @@ public class Panel extends JPanel {
         add(code_input);
         add(money_manipulators);
         add(lock);
+        add(cashbox);
 
         work();
     }
@@ -162,10 +162,34 @@ public class Panel extends JPanel {
                     for (JSpinner spinner : assortment.compartment_managers) {
                         spinner.setEnabled(false);
                     }
+                    for (JSpinner spinner : cashbox.coins_managers) {
+                        spinner.setEnabled(false);
+                    }
+                    for (JSpinner spinner : cashbox.banknotes_managers) {
+                        spinner.setEnabled(false);
+                    }
+                    for (JLabel icon : cashbox.coins_icons) {
+                        icon.setEnabled(false);
+                    }
+                    for (JLabel icon : cashbox.banknotes_icons) {
+                        icon.setEnabled(false);
+                    }
                 } else {
                     lock.setIcon(unlock_icon);
                     for (JSpinner spinner : assortment.compartment_managers) {
                         spinner.setEnabled(true);
+                    }
+                    for (JSpinner spinner : cashbox.coins_managers) {
+                        spinner.setEnabled(true);
+                    }
+                    for (JSpinner spinner : cashbox.banknotes_managers) {
+                        spinner.setEnabled(true);
+                    }
+                    for (JLabel icon : cashbox.coins_icons) {
+                        icon.setEnabled(true);
+                    }
+                    for (JLabel icon : cashbox.banknotes_icons) {
+                        icon.setEnabled(true);
                     }
                 }
             }
@@ -213,7 +237,7 @@ public class Panel extends JPanel {
     }
 
     private void getChange() {
-        Pair<List<Coins>, List<Banknotes>> change = cashbox.intToMoney();
+        change = cashbox.intToMoney();
         getMoney(change.getFirst(), change.getSecond());
         cashbox.sum = 0;
         sum_display.setText("0");
