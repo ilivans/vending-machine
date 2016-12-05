@@ -28,7 +28,7 @@ public class CodeInput extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     String digit = ((JButton) e.getSource()).getText();
                     String code_display_text = code_display.getText();
-                    if (code_display_text.equals(error_text)) {
+                    if (code_display_text.startsWith(error_text)) {
                         code_display.setText(digit);
                     } else if (code_display_text.length() < 2) {
                         code_display.setText(code_display_text + digit);

@@ -129,16 +129,13 @@ public class Panel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String code_text = code_input.code_display.getText();
                 if (code_text.length() != 2) {
-                    code_input.code_display.setText(code_input.error_text);
+                    code_input.code_display.setText(code_input.error_text + ": invalid code");
+                    return;
                 }
-                try {
-                    Integer code = Integer.parseInt(code_text);
-                    tryBuy(code);
-                } catch (NumberFormatException ex) {
-                    code_input.code_display.setText(code_input.error_text);
-                }
+                tryBuy(Integer.parseInt(code_text));
             }
         });
+        // Just add to JPanel
         code_input.add(buy_button);
     }
 
@@ -216,7 +213,7 @@ public class Panel extends JPanel {
     }
 
     private void getMoney(Coins coins, Banknotes banknotes) {
-        // this method can be called by staff
+        // This method can be called only by staff.
         cashbox.take(false, Collections.singletonList(coins), Collections.singletonList(banknotes));
     }
 
@@ -229,15 +226,15 @@ public class Panel extends JPanel {
             }
         }
         if (compartment == null) {
-            code_input.code_display.setText(code_input.error_text);
+            code_input.code_display.setText(code_input.error_text + ": invalid code");
             return;
         }
         if (Objects.equals(compartment.cells_free, compartment.cells_max)) {
-            code_input.code_display.setText(code_input.error_text);
+            code_input.code_display.setText(code_input.error_text + ": out of goods");
             return;
         }
         if (cashbox.sum < compartment.product.price) {
-            code_input.code_display.setText(code_input.error_text);
+            code_input.code_display.setText(code_input.error_text + ": not enough money");
             return;
         }
         code_input.code_display.setText("");
