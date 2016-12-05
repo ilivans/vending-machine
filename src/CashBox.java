@@ -8,19 +8,18 @@ public class CashBox {
     private List<Coins> coins;
     private List<Banknotes> banknotes;
 
+    private Boolean mode;
+
     public CashBox(List<Coins> coins, List<Banknotes> banknotes) {
         this.sum = 0;
         this.coins = coins;
         this.banknotes = banknotes;
-
     }
 
     public void insert(Boolean mode, List<Coins> coins_new, List<Banknotes> banknotes_new) {
+        this.mode = mode;
         for (Coins coins_add : coins_new) {
             addCoins(coins_add);
-            if (mode) {
-                sum += coins_add.denomination * coins_add.number;
-            }
         }
         for (Banknotes banknotes_add : banknotes_new) {
             addBanknotes(banknotes_add);
@@ -33,9 +32,12 @@ public class CashBox {
     private void addBanknotes(Banknotes banknotes_add) {
         for (Banknotes banknotes : this.banknotes) {
             if (banknotes.denomination.equals(banknotes_add.denomination)) {
+                if (mode) {
+                    sum += banknotes_add.denomination * Integer.min(banknotes_add.number, banknotes.max_size - banknotes_add.number);
+                }
                 if (banknotes.max_size < banknotes.number + banknotes_add.number) {
                     banknotes.changeNumber(banknotes.max_size);
-                    // TODO: add logic with dropping extra money (that don't fit in anymore) into Change window
+                    // TODO: drop extra money (that don't fit in anymore) into Change window
                 }
                 else {
                     banknotes.changeNumber(banknotes.number + banknotes_add.number);
@@ -48,9 +50,12 @@ public class CashBox {
     private void addCoins(Coins coins_add) {
         for (Coins coins : this.coins) {
             if (coins.denomination.equals(coins_add.denomination)) {
+                if (mode) {
+                    sum += coins_add.denomination * Integer.min(coins_add.number, coins.max_size - coins.number);
+                }
                 if (coins.max_size < coins.number + coins_add.number) {
                     coins.changeNumber(coins.max_size);
-                    // TODO: add logic with dropping extra money (that don't fit in anymore) into Change window
+                    // TODO: drop extra money (that don't fit in anymore) into Change window
                 }
                 else {
                     coins.changeNumber(coins.number + coins_add.number);

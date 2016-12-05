@@ -47,7 +47,6 @@ public class Assortment extends JPanel {
         compartment.changeCellsFree(Integer.max(compartment.cells_max - number, 0));
         for (int i = 0; i < compartments.size(); i++) {
             if (compartment.equals(compartments.get(i))) {
-                System.out.println(number);
                 compartment_managers.get(i).setValue(number);
             }
         }

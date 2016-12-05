@@ -1,3 +1,5 @@
+import utils.Pair;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
@@ -13,22 +15,24 @@ public class Panel extends JPanel {
     private Boolean mode;
 
     private ThreadLocalRandom random = ThreadLocalRandom.current();
-    private JPanel money_manipulators = new JPanel(new GridLayout(4, 1, 0, 0));
-    private JButton bill_acceptor;
-    private JButton coin_acceptor;
-    private List<Coins> change;
-    private JButton change_window;
-    private JLabel sum_display;
 
     private CodeInput code_input = new CodeInput();
+    private JButton buy_button;
+
+    private JPanel money_manipulators = new JPanel(new GridLayout(4, 1, 0, 0));
+    private JLabel sum_display;
+    private JButton coin_acceptor;
+    private JButton bill_acceptor;
+    private List<Coins> change;
+    private JButton change_window;
+
     private JButton lock;
     private ImageIcon lock_icon = new ImageIcon(Panel.class.getResource("images/lock.png"));
     private ImageIcon unlock_icon = new ImageIcon(Panel.class.getResource("images/unlock.png"));
-    private JButton buy_button;
+
 
     public Panel(Boolean mode) {
         super();
-//        this.setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         this.mode = mode;
         setBackground(Color.white);
 
@@ -83,7 +87,7 @@ public class Panel extends JPanel {
                     default: denomination = 10;
                         break;
                 }
-                putMoney(new Coins(1, 1, denomination), new Banknotes(0,0,0));
+                putMoney(Collections.singletonList(new Coins(denomination)), Collections.singletonList(new Banknotes()));
             }
         });
     }
@@ -112,15 +116,20 @@ public class Panel extends JPanel {
                     default: denomination = 100;
                         break;
                 }
-                putMoney(new Coins(0, 0, 0), new Banknotes(1, 1, denomination));
+                putMoney(Collections.singletonList(new Coins()), Collections.singletonList(new Banknotes(denomination)));
             }
         });
     }
 
     private void initChangeWindow() {
-        change_window = new JButton("Your Change", new ImageIcon(Panel.class.getResource("images/change.png")));
+        change_window = new JButton("Get Change", new ImageIcon(Panel.class.getResource("images/change.png")));
         change_window.setHorizontalTextPosition(JLabel.CENTER);
         change_window.setVerticalTextPosition(JLabel.BOTTOM);
+        change_window.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getChange();
+            }
+        });
     }
 
     private void initBuyButton() {
@@ -204,17 +213,20 @@ public class Panel extends JPanel {
     }
 
     private void getChange() {
-        // TODO: implementation
+        Pair<List<Coins>, List<Banknotes>> change = cashbox.intToMoney();
+        getMoney(change.getFirst(), change.getSecond());
+        cashbox.sum = 0;
+        sum_display.setText("0");
+        // TODO: add visualization of the money received by customer
     }
 
-    private void putMoney(Coins coins, Banknotes banknotes) {
-        cashbox.insert(mode, Collections.singletonList(coins), Collections.singletonList(banknotes));
+    private void putMoney(List<Coins> coins, List<Banknotes> banknotes) {
+        cashbox.insert(mode, coins, banknotes);
         sum_display.setText(Integer.toString(cashbox.sum));
     }
 
-    private void getMoney(Coins coins, Banknotes banknotes) {
-        // This method can be called only by staff.
-        cashbox.take(false, Collections.singletonList(coins), Collections.singletonList(banknotes));
+    private void getMoney(List<Coins> coins, List<Banknotes> banknotes) {
+        cashbox.take(mode, coins, banknotes);
     }
 
     private void tryBuy(Integer compartment_id) {
