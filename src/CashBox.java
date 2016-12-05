@@ -92,6 +92,16 @@ public class CashBox extends JPanel {
         for (Banknotes banknotes_add : banknotes_new) {
             addBanknotes(banknotes_add);
         }
+        updateManagers();
+    }
+
+    private void updateManagers() {
+        for (int i = 0; i < coins.size(); i++) {
+            coins_managers.get(i).setValue(coins.get(i).number);
+        }
+        for (int i = 0; i < banknotes.size(); i++) {
+            banknotes_managers.get(i).setValue(banknotes.get(i).number);
+        }
     }
 
     private void addBanknotes(Banknotes banknotes_add) {
@@ -137,6 +147,7 @@ public class CashBox extends JPanel {
         for (Banknotes banknote : banknotes) {
             subBanknontes(mode, banknote);
         }
+        updateManagers();
     }
 
     private void subCoins(Boolean mode, Coins coins_sub) {
@@ -164,18 +175,21 @@ public class CashBox extends JPanel {
     }
 
     public Pair<List<Coins>, List<Banknotes>> intToMoney() {
+        int cur_sum = sum;
         ArrayList<Coins> res_coins = new ArrayList<Coins>();
         ArrayList<Banknotes> res_banknotes = new ArrayList<Banknotes>();
         Collections.sort(this.coins, Money.getCompByName());
         Collections.sort(this.banknotes, Money.getCompByName());
         for (Banknotes banknote : this.banknotes) {
-            Integer count = Math.min(banknote.number, sum/banknote.denomination);
+            Integer count = Math.min(banknote.number, cur_sum/banknote.denomination);
+            cur_sum -= count * banknote.denomination;
             res_banknotes.add(new Banknotes(count, banknote.max_size, banknote.denomination));
         }
         for (Coins coin : this.coins) {
-            Integer count = Math.min(coin.number, sum/coin.denomination);
+            Integer count = Math.min(coin.number, cur_sum/coin.denomination);
+            cur_sum -= count * coin.denomination;
             res_coins.add(new Coins(count, coin.max_size, coin.denomination));
         }
-        return new Pair<>(coins, banknotes);
+        return new Pair<>(res_coins, res_banknotes);
     }
 }

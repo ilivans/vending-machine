@@ -1,3 +1,5 @@
+import jdk.nashorn.internal.runtime.regexp.joni.exception.ValueException;
+
 import java.util.Comparator;
 
 public class Money {
@@ -21,7 +23,10 @@ public class Money {
     }
 
     public void changeNumber(Integer new_number) {
-        number = Integer.max(new_number, number);
+        if (new_number > max_size || new_number < 0) {
+            throw new ValueException("Invalid amount of money");
+        }
+        number = new_number;
     }
 
     public static Comparator<Money> getCompByName() {

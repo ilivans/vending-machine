@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Panel extends JPanel {
     private CashBox cashbox;
     private Assortment assortment;
-    private Boolean mode;
+    private Boolean mode;   // true - customer, false - staff
 
     private ThreadLocalRandom random = ThreadLocalRandom.current();
 
@@ -123,6 +123,7 @@ public class Panel extends JPanel {
 
     private void initChangeWindow() {
         change_window = new JButton("Get Change", new ImageIcon(Panel.class.getResource("images/change.png")));
+        change_window.setBackground(Color.white);
         change_window.setHorizontalTextPosition(JLabel.CENTER);
         change_window.setVerticalTextPosition(JLabel.BOTTOM);
         change_window.addActionListener(new ActionListener() {
@@ -245,7 +246,7 @@ public class Panel extends JPanel {
     }
 
     public void work() {
-        System.out.println("Panel's working!");
+        setVisible(true);
     }
 
     private void getChange() {
