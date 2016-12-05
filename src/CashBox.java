@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.List;
 
 public class CashBox extends JPanel {
-    public Integer sum;
+    public Integer sum = 0;
     private List<Coins> coins;
     private List<Banknotes> banknotes;
 
@@ -26,7 +26,6 @@ public class CashBox extends JPanel {
         setBackground(Color.white);
         setBorder(new TitledBorder("Cashbox"));
         setEnabled(false);
-        this.sum = 0;
         this.coins = coins;
         this.banknotes = banknotes;
 
