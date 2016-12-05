@@ -70,6 +70,7 @@ public class Panel extends JPanel {
         coin_acceptor.setHorizontalTextPosition(JLabel.CENTER);
         coin_acceptor.setVerticalTextPosition(JLabel.BOTTOM);
         coin_acceptor.addActionListener(new ActionListener(){
+            // TODO: add images for each denomination (it's probably needed to replace OptionDialog with something else)
             public void actionPerformed(ActionEvent e){
                 Object[] options = {"5 rub.", "10 rub."};
                 int response = JOptionPane.showOptionDialog(new JFrame(),
@@ -227,6 +228,7 @@ public class Panel extends JPanel {
     }
 
     private void initAssortment() {
+        // TODO: move all parameters of machine (e.g. amount of money or product descriptions) to configuration file
         // there must must be pictures with the same names and .jpg format in images folder
         List<String> product_names = Arrays.asList("bonaqua", "bounty", "coca-cola", "fanta", "lay's", "m&m's");
         List<Compartment> compartments = new ArrayList<>();
