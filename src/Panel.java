@@ -217,7 +217,7 @@ public class Panel extends JPanel {
         getMoney(change.getFirst(), change.getSecond());
         cashbox.sum = 0;
         sum_display.setText("0");
-        // TODO: add visualization of the money received by customer
+        // TODO: add a visualization of the money received by customer
     }
 
     private void putMoney(List<Coins> coins, List<Banknotes> banknotes) {
@@ -252,8 +252,8 @@ public class Panel extends JPanel {
         code_input.code_display.setText("");
         cashbox.sum -= compartment.product.price;
         sum_display.setText(Integer.toString(cashbox.sum));
-        assortment.changeCompartment(compartment, compartment.product, compartment.cells_max - compartment.cells_free - 1);
-        // TODO: add jlabel with bought product
+        assortment.buy(compartment_id);
+        // TODO: add a visualization of the bought product
     }
 
 }

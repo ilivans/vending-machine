@@ -61,6 +61,16 @@ public class Assortment extends JPanel {
         throw new ValueException("No compartment with id " + compartment_id.toString());
     }
     public void buy(Integer compartment_id) {
-        // TODO: implementation
+        Compartment compartment = null;
+        for (Compartment comp : compartments) {
+            if (compartment_id.equals(comp.id)) {
+                compartment = comp;
+                break;
+            }
+        }
+        if (compartment == null) {
+            throw new ValueException("Invalid compartment_id for buying");
+        }
+        changeCompartment(compartment, compartment.product, compartment.cells_max - compartment.cells_free - 1);
     }
 }

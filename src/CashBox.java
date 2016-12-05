@@ -23,9 +23,6 @@ public class CashBox {
         }
         for (Banknotes banknotes_add : banknotes_new) {
             addBanknotes(banknotes_add);
-            if (mode) {
-                sum += banknotes_add.denomination * banknotes_add.number;
-            }
         }
     }
 
