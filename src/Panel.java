@@ -165,7 +165,7 @@ public class Panel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (mode && cashbox.sum > 0) {
-                    JOptionPane.showMessageDialog(new JFrame(), "pay_system.Money entered.");
+                    JOptionPane.showMessageDialog(new JFrame(), "Money entered.");
                     return;
                 }
                 mode = !mode;
