@@ -246,7 +246,7 @@ public class Panel extends JPanel {
             Product product = new Product(product_name, price, i);
             Integer compartment_id = i + 11;
             String label = String.format("#%d | %d rub.", compartment_id, product.price);
-            ImageIcon icon = new ImageIcon(Panel.class.getResource(String.format("images/%s.jpg", product_name)));
+            ImageIcon icon = new ImageIcon(Product.class.getResource(String.format("images/%s.jpg", product_name)));
             Integer cells_free = random.nextInt(0, 10);
             compartments.add(new Compartment(label, icon, JLabel.CENTER, compartment_id, cells_max, cells_free, product));
         }

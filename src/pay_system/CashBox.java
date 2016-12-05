@@ -51,7 +51,7 @@ public class CashBox extends JPanel {
             spinner.setEnabled(false);
             coins_managers.add(spinner);
 
-            JLabel icon = new JLabel(new ImageIcon(VendingMachine.class.getResource(String.format("images/coin%d.jpg", c.denomination))));
+            JLabel icon = new JLabel(new ImageIcon(CashBox.class.getResource(String.format("images/coin%d.jpg", c.denomination))));
             icon.setEnabled(false);
             coins_icons.add(icon);
             coin_panel.add(icon, BorderLayout.CENTER);
@@ -75,7 +75,7 @@ public class CashBox extends JPanel {
             spinner.setEnabled(false);
             banknotes_managers.add(spinner);
 
-            JLabel icon = new JLabel(new ImageIcon(VendingMachine.class.getResource(String.format("images/bill%d.jpg", b.denomination))));
+            JLabel icon = new JLabel(new ImageIcon(CashBox.class.getResource(String.format("images/bill%d.jpg", b.denomination))));
             icon.setEnabled(false);
             banknotes_icons.add(icon);
             banknote_panel.add(icon, BorderLayout.CENTER);
