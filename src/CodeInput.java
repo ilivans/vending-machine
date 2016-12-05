@@ -5,14 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class CodeInput extends JPanel {
-    private JLabel code_display;
+    public JLabel code_display;
+    public String error_text = "ERROR";
+
     private JButton[] digit_buttons;
-    private JButton accept_button;
     private JButton cancel_button;
-    private String error_text = "ERROR";
 
     public CodeInput() {
-        super(new GridLayout(2,1, 0,0));
+        super(new GridLayout(3,1, 0,0));
         code_display = new JLabel("");
         code_display.setBorder(new TitledBorder("Code entered"));
         add(code_display);
@@ -30,7 +30,7 @@ public class CodeInput extends JPanel {
                     String code_display_text = code_display.getText();
                     if (code_display_text.equals(error_text)) {
                         code_display.setText(digit);
-                    } else {
+                    } else if (code_display_text.length() < 2) {
                         code_display.setText(code_display_text + digit);
                     }
                 }
@@ -38,27 +38,12 @@ public class CodeInput extends JPanel {
             buttons.add(digit_buttons[i]);
         }
 
-        accept_button = new JButton("Accept");
         cancel_button = new JButton("Cancel");
-
-        accept_button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String code_text = code_display.getText();
-                if (code_text.length() != 2) {
-                    code_display.setText(error_text);
-                }
-                Integer code = Integer.parseInt(code_text);
-                // TODO: add logic with buying; maybe move this button out this class
-            }
-        });
-
         cancel_button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 code_display.setText("");
             }
         });
-
-        buttons.add(accept_button);
         buttons.add(cancel_button);
         add(buttons);
     }

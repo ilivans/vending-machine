@@ -1,22 +1,30 @@
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.awt.*;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Panel extends JPanel {
-    private CashBox cashBox;
+    private CashBox cashbox;
     private Assortment assortment;
     private Boolean mode;
 
     private ThreadLocalRandom random = ThreadLocalRandom.current();
+    private JPanel money_manipulators = new JPanel(new GridLayout(4, 1, 0, 0));
+    private JButton bill_acceptor;
+    private JButton coin_acceptor;
+    private List<Coins> change;
+    private JButton change_window;
+    private JLabel sum_display;
+
     private CodeInput code_input = new CodeInput();
     private JButton lock;
     private ImageIcon lock_icon = new ImageIcon(Panel.class.getResource("images/lock.png"));
     private ImageIcon unlock_icon = new ImageIcon(Panel.class.getResource("images/unlock.png"));
+    private JButton buy_button;
 
     public Panel(Boolean mode) {
         super();
@@ -24,15 +32,114 @@ public class Panel extends JPanel {
         this.mode = mode;
         setBackground(Color.white);
 
-        initCashBox();
+        setBorder(new TitledBorder(""));
+        setBackground(Color.lightGray);
+
         initAssortment();
+        initBuyButton();
+        initCashBox();
+        initMoneyManipulators();
         initLock();
-        
+
         add(assortment);
         add(code_input);
-        add(cashBox);
+        add(money_manipulators);
         add(lock);
 
+        work();
+    }
+
+    private void initMoneyManipulators() {
+        sum_display = new JLabel(cashbox.sum.toString());
+        sum_display.setBorder(new TitledBorder("Sum entered"));
+        money_manipulators.add(sum_display);
+        initCoinAcceptor();
+        money_manipulators.add(coin_acceptor);
+        initBillAcceptor();
+        money_manipulators.add(bill_acceptor);
+        initChangeWindow();
+        money_manipulators.add(change_window);
+    }
+
+    private void initCoinAcceptor() {
+        coin_acceptor = new JButton("Coin Acceptor", new ImageIcon(Panel.class.getResource("images/coin-acceptor.png")));
+        coin_acceptor.setHorizontalTextPosition(JLabel.CENTER);
+        coin_acceptor.setVerticalTextPosition(JLabel.BOTTOM);
+        coin_acceptor.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                Object[] options = {"5 rub.", "10 rub."};
+                int response = JOptionPane.showOptionDialog(new JFrame(),
+                        "Choose denomination",
+                        "",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[1]);
+                int denomination = 0;
+                switch (response) {
+                    case JOptionPane.YES_OPTION: denomination = 5;
+                        break;
+                    default: denomination = 10;
+                        break;
+                }
+                putMoney(new Coins(1, 1, denomination), new Banknotes(0,0,0));
+            }
+        });
+    }
+
+    private void initBillAcceptor() {
+        bill_acceptor = new JButton("Bill Acceptor", new ImageIcon(Panel.class.getResource("images/bill-acceptor.png")));
+        bill_acceptor.setHorizontalTextPosition(JLabel.CENTER);
+        bill_acceptor.setVerticalTextPosition(JLabel.BOTTOM);
+        bill_acceptor.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                Object[] options = {"10 rub.", "50 rub.", "100 rub."};
+                int response = JOptionPane.showOptionDialog(new JFrame(),
+                        "Choose denomination",
+                        "",
+                        JOptionPane.YES_NO_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        options[2]);
+                int denomination = 0;
+                switch (response) {
+                    case JOptionPane.YES_OPTION: denomination = 10;
+                        break;
+                    case JOptionPane.NO_OPTION: denomination = 50;
+                        break;
+                    default: denomination = 100;
+                        break;
+                }
+                putMoney(new Coins(0, 0, 0), new Banknotes(1, 1, denomination));
+            }
+        });
+    }
+
+    private void initChangeWindow() {
+        change_window = new JButton("Your Change", new ImageIcon(Panel.class.getResource("images/change.png")));
+        change_window.setHorizontalTextPosition(JLabel.CENTER);
+        change_window.setVerticalTextPosition(JLabel.BOTTOM);
+    }
+
+    private void initBuyButton() {
+        buy_button = new JButton("BUY");
+        buy_button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String code_text = code_input.code_display.getText();
+                if (code_text.length() != 2) {
+                    code_input.code_display.setText(code_input.error_text);
+                }
+                try {
+                    Integer code = Integer.parseInt(code_text);
+                    tryBuy(code);
+                } catch (NumberFormatException ex) {
+                    code_input.code_display.setText(code_input.error_text);
+                }
+            }
+        });
+        code_input.add(buy_button);
     }
 
     private void initLock() {
@@ -47,7 +154,6 @@ public class Panel extends JPanel {
                 if (mode) {
                     lock.setIcon(lock_icon);
                     for (JSpinner spinner : assortment.compartment_managers) {
-//                        spinner.setVisible(false);
                         spinner.setEnabled(false);
                     }
                 } else {
@@ -74,8 +180,7 @@ public class Panel extends JPanel {
         for (Integer denomination : banknotes_denominations) {
             banknotes.add(new Banknotes(random.nextInt(banknotes_max_size / 2, banknotes_max_size), banknotes_max_size, denomination));
         }
-
-        cashBox = new CashBox(coins, banknotes);
+        cashbox = new CashBox(coins, banknotes);
     }
 
     private void initAssortment() {
@@ -98,23 +203,48 @@ public class Panel extends JPanel {
     }
 
     public void work() {
-
+        System.out.println("Panel's working!");
     }
 
     private void getChange() {
         // TODO: implementation
     }
 
-    private void putMoney() {
-        // TODO: implementation
+    private void putMoney(Coins coins, Banknotes banknotes) {
+        cashbox.insert(mode, Collections.singletonList(coins), Collections.singletonList(banknotes));
+        sum_display.setText(Integer.toString(cashbox.sum));
     }
 
-    private void getMoney() {
-        // TODO: implementation
+    private void getMoney(Coins coins, Banknotes banknotes) {
+        // this method can be called by staff
+        cashbox.take(false, Collections.singletonList(coins), Collections.singletonList(banknotes));
     }
 
     private void tryBuy(Integer compartment_id) {
-        // TODO: implementation
+        Compartment compartment = null;
+        for (Compartment comp : assortment.compartments) {
+            if (compartment_id.equals(comp.id)) {
+                compartment = comp;
+                break;
+            }
+        }
+        if (compartment == null) {
+            code_input.code_display.setText(code_input.error_text);
+            return;
+        }
+        if (Objects.equals(compartment.cells_free, compartment.cells_max)) {
+            code_input.code_display.setText(code_input.error_text);
+            return;
+        }
+        if (cashbox.sum < compartment.product.price) {
+            code_input.code_display.setText(code_input.error_text);
+            return;
+        }
+        code_input.code_display.setText("");
+        cashbox.sum -= compartment.product.price;
+        sum_display.setText(Integer.toString(cashbox.sum));
+        assortment.changeCompartment(compartment, compartment.product, compartment.cells_max - compartment.cells_free - 1);
+        // TODO: add jlabel with bought product
     }
 
 }

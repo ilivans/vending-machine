@@ -19,7 +19,6 @@ public class Compartment extends JLabel {
 
     public void changeProduct(Product new_product) {
         product = new_product;
-        // TODO: how to manage cells_free?
     }
 
     public void changeCellsFree(Integer new_cells_free) {
