@@ -29,6 +29,8 @@ public class CashBox extends JPanel {
         setEnabled(false);
         this.coins = coins;
         this.banknotes = banknotes;
+        Collections.sort(this.coins, Money.getCompByName());
+        Collections.sort(this.banknotes, Money.getCompByName());
 
         initPanels();
     }
@@ -145,7 +147,7 @@ public class CashBox extends JPanel {
             subCoins(mode, coin);
         }
         for (Banknotes banknote : banknotes) {
-            subBanknontes(mode, banknote);
+            subBanknotes(mode, banknote);
         }
         updateManagers();
     }
@@ -162,7 +164,7 @@ public class CashBox extends JPanel {
         }
     }
 
-    private void subBanknontes(Boolean mode, Banknotes banknotes_sub) {
+    private void subBanknotes(Boolean mode, Banknotes banknotes_sub) {
         for (Banknotes banknotes : this.banknotes) {
             if (banknotes.denomination.equals(banknotes_sub.denomination)) {
                 banknotes.changeNumber(Math.max(0, banknotes.number - banknotes_sub.number));
@@ -178,8 +180,6 @@ public class CashBox extends JPanel {
         int cur_sum = sum;
         ArrayList<Coins> res_coins = new ArrayList<Coins>();
         ArrayList<Banknotes> res_banknotes = new ArrayList<Banknotes>();
-        Collections.sort(this.coins, Money.getCompByName());
-        Collections.sort(this.banknotes, Money.getCompByName());
         for (Banknotes banknote : this.banknotes) {
             Integer count = Math.min(banknote.number, cur_sum/banknote.denomination);
             cur_sum -= count * banknote.denomination;

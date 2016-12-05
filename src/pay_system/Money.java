@@ -34,7 +34,7 @@ public class Money {
     public static Comparator<Money> getCompByName() {
         Comparator comp = new Comparator<Money>(){
             public int compare(Money s1, Money s2) {
-                return s1.denomination.compareTo(s2.denomination);
+                return s2.denomination.compareTo(s1.denomination);
             }
         };
         return comp;
